@@ -49,4 +49,7 @@ mongoose
       console.log(`🚀 Server + Socket.io on port ${process.env.PORT || 5000}`)
     );
   })
-  .catch((err) => console.error("❌ MongoDB Error:", err));
+.catch((err) => {
+  console.error("❌ FULL ERROR:");
+  console.error(err);
+});
