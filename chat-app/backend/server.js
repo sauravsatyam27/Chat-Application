@@ -1,3 +1,13 @@
+process.on("uncaughtException", (err) => {
+  console.error("❌ UNCAUGHT EXCEPTION:");
+  console.error(err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("❌ UNHANDLED REJECTION:");
+  console.error(err);
+});
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -24,7 +34,13 @@ const io = new Server(server, {
 app.set("io", io);
 
 // Middleware
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -35,7 +51,9 @@ app.use("/api/conversations", require("./routes/conversationRoutes"));
 app.use("/api/messages", require("./routes/messageRoutes"));
 app.use("/api/groups", require("./routes/groupRoutes"));
 
-app.get("/", (req, res) => res.json({ message: "ChatMERN API Running ✓" }));
+app.get("/", (req, res) => {
+  res.json({ message: "ChatMERN API Running ✓" });
+});
 
 // Socket.io events
 socketHandler(io);
@@ -45,11 +63,14 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
-    server.listen(process.env.PORT || 5000, () =>
-      console.log(`🚀 Server + Socket.io on port ${process.env.PORT || 5000}`)
-    );
+
+    server.listen(process.env.PORT || 5000, () => {
+      console.log(
+        `🚀 Server + Socket.io on port ${process.env.PORT || 5000}`
+      );
+    });
   })
-.catch((err) => {
-  console.error("❌ FULL ERROR:");
-  console.error(err);
-});
+  .catch((err) => {
+    console.error("❌ FULL MONGODB ERROR:");
+    console.error(err);
+  });
