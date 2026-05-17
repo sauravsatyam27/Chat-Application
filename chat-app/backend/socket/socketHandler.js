@@ -97,7 +97,7 @@ module.exports = (io) => {
         const { groupId, content, type = "text", fileUrl, fileName, replyTo } = data;
 
         const group = await Group.findById(groupId);
-        if (!group || !group.members.includes(userId)) {
+        if (!group || !group.members.some(m => m.toString() === userId)) {
           return socket.emit("error", { message: "Not a member of this group" });
         }
 
