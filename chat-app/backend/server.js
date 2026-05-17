@@ -1,10 +1,10 @@
 process.on("uncaughtException", (err) => {
-  console.error("❌ UNCAUGHT EXCEPTION:");
+  console.error("UNCAUGHT EXCEPTION:");
   console.error(err);
 });
 
 process.on("unhandledRejection", (err) => {
-  console.error("❌ UNHANDLED REJECTION:");
+  console.error("UNHANDLED REJECTION:");
   console.error(err);
 });
 
@@ -18,13 +18,16 @@ const socketHandler = require("./socket/socketHandler");
 
 dotenv.config();
 
+const PORT = process.env.PORT || 5000;
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+
 const app = express();
 const server = http.createServer(app);
 
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: CLIENT_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -36,7 +39,7 @@ app.set("io", io);
 // Middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: CLIENT_URL,
     credentials: true,
   })
 );
@@ -52,25 +55,38 @@ app.use("/api/messages", require("./routes/messageRoutes"));
 app.use("/api/groups", require("./routes/groupRoutes"));
 
 app.get("/", (req, res) => {
-  res.json({ message: "ChatMERN API Running ✓" });
+  res.json({ message: "ChatMERN API Running" });
+});
+
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    database:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  });
 });
 
 // Socket.io events
 socketHandler(io);
 
-// Connect MongoDB and start server
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("✅ MongoDB Connected");
+const connectMongoDB = async () => {
+  if (!process.env.MONGO_URI) {
+    console.error(
+      "MONGO_URI is missing. Add it in your deployment environment variables."
+    );
+    return;
+  }
 
-    server.listen(process.env.PORT || 5000, () => {
-      console.log(
-        `🚀 Server + Socket.io on port ${process.env.PORT || 5000}`
-      );
-    });
-  })
-  .catch((err) => {
-    console.error("❌ FULL MONGODB ERROR:");
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected");
+  } catch (err) {
+    console.error("MongoDB connection error:");
     console.error(err);
-  });
+  }
+};
+
+server.listen(PORT, () => {
+  console.log(`Server + Socket.io listening on port ${PORT}`);
+  connectMongoDB();
+});
