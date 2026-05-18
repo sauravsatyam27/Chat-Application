@@ -52,6 +52,8 @@ const useChatStore = create((set, get) => ({
     }
   },
 
+  clearActiveChat: () => set({ activeChat: null, messages: [], isLoadingMessages: false }),
+
   // ─── MESSAGES ───────────────────────────────────────────────────
   addMessage: (message) => {
     set((state) => {
@@ -111,6 +113,20 @@ const useChatStore = create((set, get) => ({
       if (exists) return state;
       return { groups: [group, ...state.groups] };
     });
+  },
+
+  createGroup: async ({ name, description, members }) => {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description || "");
+    members.forEach((memberId) => formData.append("members", memberId));
+
+    const { data } = await api.post("/groups", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    set((state) => ({ groups: [data.group, ...state.groups] }));
+    return data.group;
   },
 
   searchUsers: async (q) => {

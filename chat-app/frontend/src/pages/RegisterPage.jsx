@@ -17,14 +17,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-dark-950 flex items-center justify-center p-4">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl" />
-      </div>
-
+    <div className="min-h-screen bg-chat-pattern flex items-center justify-center p-4">
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl mb-4 shadow-lg shadow-primary-600/30">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-emerald-500 rounded-2xl mb-4 shadow-lg shadow-primary-950/40">
             <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -34,7 +30,7 @@ export default function RegisterPage() {
           <p className="text-slate-400 mt-1">Start chatting in seconds</p>
         </div>
 
-        <div className="bg-dark-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+        <div className="glass-panel p-8 shadow-2xl">
           <h2 className="text-xl font-semibold text-white mb-6">Create account</h2>
 
           {(error || err) && (
@@ -66,7 +62,7 @@ export default function RegisterPage() {
               <label className="block text-sm text-slate-400 mb-1.5">Confirm Password</label>
               <input type="password" required value={form.confirm}
                 onChange={(e) => setForm({ ...form, confirm: e.target.value })}
-                placeholder="••••••••" className="input-field" />
+                placeholder="Confirm password" className="input-field" />
             </div>
 
             <button type="submit" disabled={isLoading} className="btn-primary w-full mt-2">

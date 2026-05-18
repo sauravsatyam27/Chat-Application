@@ -7,9 +7,18 @@ exports.createGroup = async (req, res) => {
   try {
     const { name, description, members } = req.body;
     const avatar = req.file ? req.file.path : "";
+    const memberList = Array.isArray(members)
+      ? members
+      : members
+        ? [members]
+        : [];
+
+    if (!name?.trim()) {
+      return res.status(400).json({ success: false, message: "Group name is required" });
+    }
 
     // Always add creator as member + admin
-    const allMembers = [...new Set([req.user._id.toString(), ...members])];
+    const allMembers = [...new Set([req.user._id.toString(), ...memberList])];
 
     const group = await Group.create({
       name,
@@ -24,7 +33,7 @@ exports.createGroup = async (req, res) => {
 
     // Notify new members via Socket.io
     const io = req.app.get("io");
-    members.forEach((memberId) => {
+    memberList.forEach((memberId) => {
       io.to(memberId).emit("group:added", { group });
     });
 

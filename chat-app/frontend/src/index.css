@@ -15,25 +15,69 @@
 }
 
 @layer components {
+  .sidebar-surface {
+    background:
+      linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(8, 13, 23, 0.98)),
+      radial-gradient(circle at top left, rgba(14, 165, 233, 0.16), transparent 32%);
+  }
+  .bg-chat-pattern {
+    background:
+      radial-gradient(circle at 18% 20%, rgba(16, 185, 129, 0.08), transparent 24%),
+      radial-gradient(circle at 82% 12%, rgba(14, 165, 233, 0.12), transparent 24%),
+      linear-gradient(180deg, #080d17 0%, #0b1220 100%);
+  }
+  .glass-panel {
+    @apply bg-white/[0.04] border border-white/10 rounded-2xl backdrop-blur;
+  }
+  .icon-button {
+    @apply w-9 h-9 rounded-xl flex items-center justify-center transition-colors;
+  }
+  .stat-pill {
+    @apply rounded-xl bg-white/[0.04] border border-white/10 px-2 py-2;
+  }
+  .stat-pill strong {
+    @apply block text-sm text-white leading-none;
+  }
+  .stat-pill span {
+    @apply block text-[10px] text-slate-500 mt-1;
+  }
   .chat-bubble-sent {
-    @apply bg-primary-600 text-white rounded-2xl rounded-br-sm px-4 py-2 max-w-xs lg:max-w-md break-words;
+    @apply bg-gradient-to-br from-primary-500 to-primary-700 text-white rounded-2xl rounded-br-sm px-4 py-2 max-w-xs lg:max-w-md break-words shadow-lg shadow-primary-950/30;
   }
   .chat-bubble-received {
-    @apply bg-dark-800 text-slate-100 rounded-2xl rounded-bl-sm px-4 py-2 max-w-xs lg:max-w-md break-words;
+    @apply bg-white/[0.06] border border-white/10 text-slate-100 rounded-2xl rounded-bl-sm px-4 py-2 max-w-xs lg:max-w-md break-words;
   }
   .sidebar-item {
-    @apply flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer transition-all hover:bg-dark-800;
+    @apply flex items-center gap-3 px-3 py-3 rounded-2xl cursor-pointer transition-all hover:bg-white/[0.06];
   }
   .sidebar-item.active {
-    @apply bg-dark-800 border border-slate-700/50;
+    @apply bg-primary-500/10 border border-primary-400/20 shadow-lg shadow-primary-950/20;
   }
   .input-field {
-    @apply bg-dark-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-500
-           focus:outline-none focus:border-primary-500 transition-colors w-full;
+    @apply bg-white/[0.05] border border-white/10 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-500
+           focus:outline-none focus:border-primary-400/80 focus:bg-white/[0.07] transition-colors w-full;
   }
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2.5 rounded-xl transition-all
+    @apply bg-gradient-to-br from-primary-500 to-emerald-500 hover:brightness-110 text-white font-medium px-6 py-2.5 rounded-xl transition-all
            active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .composer-shell {
+    @apply bg-dark-900/90 border border-white/10 rounded-2xl px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur;
+  }
+  .emoji-button {
+    @apply w-8 h-8 rounded-lg text-sm flex items-center justify-center hover:bg-white/10 transition-colors disabled:opacity-40;
+  }
+  .message-action {
+    @apply p-1.5 rounded-lg bg-dark-900/90 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-colors;
+  }
+  .unread-badge {
+    @apply bg-primary-500 text-white text-xs rounded-full min-w-5 h-5 px-1.5 flex items-center justify-center flex-shrink-0;
+  }
+  .detail-heading {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2;
+  }
+  .detail-item {
+    @apply block w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 hover:bg-white/[0.07] transition-colors;
   }
 }
 
